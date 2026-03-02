@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eduspark International Pvt Ltd – Cloud Application Developer Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ======== RESET & ROOT ======== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --navy:       #002147;
+  --navy-dark:  #001230;
+  --navy-mid:   #003070;
+  --sky:        #0056b3;
+  --sky-light:  #1a7ee0;
+  --sky-pale:   #e8f2ff;
+  --orange:     #ff8c00;
+  --orange-lt:  #ffaa33;
+  --orange-pale:#fff4e0;
+  --white:      #ffffff;
+  --off-white:  #f5f8fc;
+  --text:       #1a2a3a;
+  --text-muted: #5a6e82;
+  --border:     rgba(0,33,71,0.1);
+  --shadow-sm:  0 2px 8px rgba(0,33,71,0.08);
+  --shadow-md:  0 8px 30px rgba(0,33,71,0.12);
+  --shadow-lg:  0 20px 60px rgba(0,33,71,0.15);
+  --radius:     14px;
+  --radius-sm:  8px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ======== NAVIGATION ======== */
+nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(0,33,71,0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6%;
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+
+.nav-logo { display: flex; align-items: center; gap: 13px; text-decoration: none; }
+.logo-mark {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--orange) 0%, #e06000 100%);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: white;
+  box-shadow: 0 4px 16px rgba(255,140,0,0.45); flex-shrink: 0;
+}
+.logo-copy { display: flex; flex-direction: column; }
+.logo-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: white; line-height: 1.25; letter-spacing: 0.3px; }
+.logo-tagline { font-size: 0.62rem; color: rgba(255,255,255,0.45); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; }
+
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-links a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  font-size: 0.88rem; font-weight: 500;
+  padding: 8px 15px; border-radius: var(--radius-sm);
+  transition: all 0.2s ease; letter-spacing: 0.2px;
+}
+.nav-links a:hover { color: white; background: rgba(255,255,255,0.1); }
+.nav-btn-cta {
+  background: var(--orange) !important; color: white !important;
+  padding: 9px 22px !important; font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 14px rgba(255,140,0,0.4) !important;
+}
+.nav-btn-cta:hover { background: var(--orange-lt) !important; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,140,0,0.5) !important; }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; }
+.hamburger span { width: 24px; height: 2px; background: white; border-radius: 2px; display: block; transition: 0.3s; }
+
+.mobile-nav {
+  display: none; position: fixed;
+  top: 72px; left: 0; right: 0;
+  background: var(--navy-dark);
+  padding: 20px 6%; flex-direction: column; gap: 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 999;
+}
+.mobile-nav.open { display: flex; animation: slideDown 0.25s ease; }
+.mobile-nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.95rem; font-weight: 500; padding: 12px 16px; border-radius: var(--radius-sm); transition: all 0.2s; }
+.mobile-nav a:hover { color: white; background: rgba(255,255,255,0.08); }
+.mobile-nav a.mob-cta { background: var(--orange); color: white; text-align: center; font-weight: 600; margin-top: 8px; }
+
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ======== HERO ======== */
+#home {
+  background: linear-gradient(160deg, var(--navy-dark) 0%, var(--navy) 40%, #003870 100%);
+  min-height: 100vh; display: flex; align-items: center;
+  position: relative; overflow: hidden; padding: 80px 6% 60px;
+}
+
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(0,86,179,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(0,86,179,0.12) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%);
+}
+
+.hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; animation: floatOrb 8s ease-in-out infinite; }
+.orb1 { width: 550px; height: 550px; background: rgba(0,86,179,0.28); top: -150px; right: -100px; }
+.orb2 { width: 320px; height: 320px; background: rgba(255,140,0,0.12); bottom: 20px; left: -80px; animation-delay: -3s; }
+.orb3 { width: 200px; height: 200px; background: rgba(0,160,255,0.18); top: 45%; right: 22%; animation-delay: -5s; }
+
+@keyframes floatOrb {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(20px,-30px) scale(1.05); }
+  66% { transform: translate(-15px,20px) scale(0.97); }
+}
+
+.hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center; max-width: 1200px; margin: 0 auto; width: 100%; position: relative; z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,140,0,0.15); border: 1px solid rgba(255,140,0,0.35);
+  border-radius: 50px; padding: 6px 16px 6px 8px; margin-bottom: 24px;
+  animation: fadeUp 0.8s ease both;
+}
+.badge-dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
+.hero-badge span { font-size: 0.78rem; color: var(--orange-lt); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,140,0,0.5);} 50%{box-shadow:0 0 0 6px rgba(255,140,0,0);} }
+
+.hero-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 800;
+  color: white; line-height: 1.15; margin-bottom: 22px;
+  animation: fadeUp 0.8s ease 0.15s both;
+}
+.hero-headline .accent { color: var(--orange); }
+.hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.68); line-height: 1.7; margin-bottom: 36px; max-width: 520px; animation: fadeUp 0.8s ease 0.3s both; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.8s ease 0.45s both; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, var(--orange) 0%, #e06000 100%);
+  color: white; text-decoration: none; font-size: 1rem; font-weight: 700;
+  padding: 15px 32px; border-radius: var(--radius);
+  box-shadow: 0 8px 25px rgba(255,140,0,0.45); transition: all 0.3s ease; cursor: pointer; border: none;
+  font-family: 'Poppins', sans-serif;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 35px rgba(255,140,0,0.55); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25);
+  color: white; text-decoration: none; font-size: 1rem; font-weight: 500;
+  padding: 14px 28px; border-radius: var(--radius); transition: all 0.3s ease;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+
+.hero-stats { display: flex; gap: 32px; margin-top: 48px; flex-wrap: wrap; animation: fadeUp 0.8s ease 0.6s both; }
+.stat-item { display: flex; flex-direction: column; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: white; line-height: 1; }
+.stat-num .stat-accent { color: var(--orange); }
+.stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 4px; font-weight: 400; letter-spacing: 0.5px; text-transform: uppercase; }
+
+.hero-visual { display: flex; flex-direction: column; gap: 14px; animation: fadeUp 0.8s ease 0.3s both; }
+
+.tech-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius); padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px;
+  backdrop-filter: blur(8px); transition: all 0.3s ease; cursor: default;
+}
+.tech-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(0,86,179,0.5); transform: translateX(6px); box-shadow: 0 8px 30px rgba(0,86,179,0.2); }
+.tech-icon { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+.tech-icon.blue { background: rgba(0,86,179,0.3); }
+.tech-icon.orange { background: rgba(255,140,0,0.2); }
+.tech-icon.green { background: rgba(0,180,100,0.2); }
+.tech-title { font-weight: 600; color: white; font-size: 0.92rem; }
+.tech-tags { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.tech-tag { font-size: 0.7rem; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); border-radius: 4px; padding: 2px 8px; }
+
+.nsdc-badge-hero {
+  background: linear-gradient(135deg, rgba(255,140,0,0.15) 0%, rgba(0,86,179,0.15) 100%);
+  border: 1px solid rgba(255,140,0,0.3); border-radius: var(--radius);
+  padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+}
+.nsdc-badge-hero .nsdc-icon { font-size: 2rem; }
+.nsdc-badge-hero .nsdc-title { font-weight: 700; color: var(--orange-lt); font-size: 0.9rem; }
+.nsdc-badge-hero .nsdc-sub { font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ======== SECTION COMMON ======== */
+section { padding: 90px 6%; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--sky); margin-bottom: 14px;
+}
+.section-label::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--orange); border-radius: 2px; }
+.section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 16px; }
+.section-sub { font-size: 1rem; color: var(--text-muted); max-width: 560px; line-height: 1.7; }
+
+/* ======== COURSES ======== */
+#courses { background: var(--off-white); }
+.courses-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; margin-top: 50px; }
+
+.course-card {
+  background: white; border-radius: 18px; padding: 36px 30px;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  transition: all 0.35s ease; position: relative; overflow: hidden; cursor: default;
+}
+.course-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--sky), var(--sky-light));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+}
+.course-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: rgba(0,86,179,0.2); }
+.course-card:hover::before { transform: scaleX(1); }
+.course-card.highlight::before { transform: scaleX(1); background: linear-gradient(90deg, var(--orange), var(--orange-lt)); }
+
+.course-icon-wrap { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 22px; }
+.icon-blue { background: var(--sky-pale); }
+.icon-navy { background: rgba(0,33,71,0.08); }
+.icon-orange { background: var(--orange-pale); }
+
+.course-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+.course-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 22px; }
+
+.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 50px; background: var(--sky-pale); color: var(--sky); border: 1px solid rgba(0,86,179,0.15); transition: all 0.2s; }
+.pill:hover { background: var(--sky); color: white; }
+.pill.orange { background: var(--orange-pale); color: var(--orange); border-color: rgba(255,140,0,0.2); }
+.pill.orange:hover { background: var(--orange); color: white; }
+.pill.navy { background: rgba(0,33,71,0.07); color: var(--navy); border-color: rgba(0,33,71,0.15); }
+.pill.navy:hover { background: var(--navy); color: white; }
+
+/* ======== SYLLABUS ======== */
+#syllabus { background: white; }
+.syllabus-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; margin-top: 50px; align-items: start; }
+
+.cert-badge { background: linear-gradient(135deg, var(--sky-pale) 0%, rgba(0,86,179,0.05) 100%); border: 1px solid rgba(0,86,179,0.2); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; }
+.cert-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.cert-row:last-child { margin-bottom: 0; }
+.cert-dot { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; flex-shrink: 0; }
+.cert-text { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+.cert-text strong { color: var(--navy); }
+
+.syllabus-modules { display: flex; flex-direction: column; gap: 18px; }
+.module-item { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s, transform 0.3s; }
+.module-item:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
+
+.module-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; background: white; transition: background 0.2s; }
+.module-header:hover { background: var(--off-white); }
+
+.module-num { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; flex-shrink: 0; }
+.mod3 { background: var(--sky-pale); color: var(--sky); }
+.mod6 { background: var(--orange-pale); color: var(--orange); }
+.mod1 { background: rgba(0,33,71,0.07); color: var(--navy); }
+.mod2 { background: rgba(0,150,100,0.1); color: #007a50; }
+.mod4 { background: rgba(150,0,150,0.08); color: #800080; }
+.mod5 { background: rgba(200,50,0,0.08); color: #c83200; }
+
+.module-meta { flex: 1; }
+.module-name { font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+.module-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+.module-chevron { color: var(--text-muted); transition: transform 0.3s; font-size: 1.1rem; }
+.module-item.open .module-chevron { transform: rotate(180deg); }
+
+.module-body { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; background: var(--off-white); }
+.module-item.open .module-body { max-height: 400px; padding: 20px 24px 22px; border-top: 1px solid var(--border); }
+.module-topics { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.module-topics li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.86rem; color: var(--text); }
+.module-topics li::before { content: '→'; color: var(--sky); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+/* ======== PORTFOLIO ======== */
+#portfolios { background: var(--off-white); }
+.portfolio-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 50px; }
+
+.portfolio-card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: all 0.35s ease; }
+.portfolio-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+
+.port-thumb { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+.port-thumb.bg1 { background: linear-gradient(135deg, #001a3a, #003870); }
+.port-thumb.bg2 { background: linear-gradient(135deg, #1a0030, #350060); }
+.port-thumb.bg3 { background: linear-gradient(135deg, #001f10, #004030); }
+
+.port-label { position: absolute; top: 12px; right: 12px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 50px; }
+.label-live { background: rgba(0,200,100,0.2); color: #00c864; border: 1px solid rgba(0,200,100,0.3); }
+.label-dev  { background: rgba(255,140,0,0.2); color: var(--orange); border: 1px solid rgba(255,140,0,0.3); }
+
+.port-body { padding: 22px 22px 26px; }
+.port-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--navy); margin-bottom: 6px; }
+.port-student { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.student-avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--sky-pale); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--sky); }
+.port-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.port-pill { font-size: 0.7rem; padding: 3px 10px; border-radius: 4px; font-weight: 600; background: var(--off-white); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ======== ENROLLMENT ======== */
+#enroll { background: var(--navy); position: relative; overflow: hidden; }
+.enroll-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; position: relative; z-index: 1; }
+
+.enroll-info .section-title { color: white; }
+.enroll-info .section-label { color: var(--orange-lt); }
+.enroll-info .section-sub { color: rgba(255,255,255,0.6); }
+.enroll-features { display: flex; flex-direction: column; gap: 18px; margin-top: 32px; }
+.ef-item { display: flex; align-items: flex-start; gap: 14px; }
+.ef-icon { width: 42px; height: 42px; background: rgba(255,255,255,0.07); border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.1); }
+.ef-title { font-weight: 600; color: white; font-size: 0.9rem; }
+.ef-sub { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.enroll-form-wrap { background: white; border-radius: 20px; padding: 40px 36px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); }
+.form-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+.form-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 28px; }
+
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 7px; letter-spacing: 0.3px; }
+.form-group label span { color: var(--orange); }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 13px 16px; border: 1.5px solid rgba(0,33,71,0.15); border-radius: var(--radius-sm);
+  font-family: 'Poppins', sans-serif; font-size: 0.9rem; color: var(--text); background: white;
+  transition: all 0.25s ease; outline: none; appearance: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(0,86,179,0.12); }
+.form-group input::placeholder { color: rgba(0,0,0,0.3); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.fee-display { background: var(--sky-pale); border: 1px solid rgba(0,86,179,0.2); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; display: none; }
+.fee-display.visible { display: flex; align-items: center; justify-content: space-between; }
+.fee-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+.fee-amount { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+.fee-note { font-size: 0.72rem; color: var(--sky); }
+
+.btn-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--orange) 0%, #d07000 100%); color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; border: none; border-radius: var(--radius); cursor: pointer; box-shadow: 0 8px 25px rgba(255,140,0,0.4); transition: all 0.3s ease; letter-spacing: 0.3px; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(255,140,0,0.5); }
+
+.success-message { display: none; text-align: center; padding: 30px 20px; }
+.success-message.visible { display: block; animation: fadeUp 0.5s ease; }
+.success-icon { font-size: 4rem; margin-bottom: 16px; }
+.success-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.success-sub { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+.success-reset { background: none; border: 1px solid var(--border); color: var(--sky); font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 10px 24px; border-radius: 8px; margin-top: 20px; cursor: pointer; transition: all 0.2s; }
+.success-reset:hover { background: var(--sky-pale); border-color: var(--sky); }
+
+/* ======== FOOTER ======== */
+footer { background: var(--navy-dark); color: rgba(255,255,255,0.6); padding: 60px 6% 30px; border-top: 1px solid rgba(255,255,255,0.08); }
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 50px; margin-bottom: 50px; }
+.footer-brand p { font-size: 0.85rem; line-height: 1.7; color: rgba(255,255,255,0.45); max-width: 280px; margin-top: 16px; }
+.footer-col h4 { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: white; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 0.8rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+
+/* ======== SCROLL REVEAL ======== */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { order: -1; }
+  .tech-card, .nsdc-badge-hero { max-width: 500px; }
+  .courses-grid { grid-template-columns: 1fr 1fr; }
+  .syllabus-layout { grid-template-columns: 1fr; gap: 40px; }
+  .portfolio-grid { grid-template-columns: 1fr 1fr; }
+  .enroll-inner { grid-template-columns: 1fr; gap: 40px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  section { padding: 70px 5%; }
+  nav { padding: 0 5%; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .courses-grid { grid-template-columns: 1fr; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 30px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .hero-stats { gap: 20px; }
+  .enroll-form-wrap { padding: 28px 22px; }
+}
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { justify-content: center; }
+  .hero-headline { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<nav id="mainNav">
+  <a href="#home" class="nav-logo">
+    <div class="logo-mark">E</div>
+    <div class="logo-copy">
+      <span class="logo-name">Eduspark International</span>
+      <span class="logo-tagline">Pvt Ltd</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#courses">Courses</a>
+    <a href="#syllabus">Syllabus</a>
+    <a href="#portfolios">Student Portfolios</a>
+    <a href="#enroll" class="nav-btn-cta">Enroll Now</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home"       onclick="closeMobileNav()">Home</a>
+  <a href="#courses"    onclick="closeMobileNav()">Courses</a>
+  <a href="#syllabus"   onclick="closeMobileNav()">Syllabus</a>
+  <a href="#portfolios" onclick="closeMobileNav()">Student Portfolios</a>
+  <a href="#enroll"     onclick="closeMobileNav()" class="mob-cta">Enroll Now →</a>
+</div>
+
+<!-- ====== HERO ====== -->
+<section id="home">
+  <div class="hero-grid"></div>
+  <div class="orb1 hero-orb"></div>
+  <div class="orb2 hero-orb"></div>
+  <div class="orb3 hero-orb"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Official NSDC &amp; MIDC Training Partner</span>
+      </div>
+      <h1 class="hero-headline">
+        Empowering India's<br>Future <span class="accent">Cloud Architects.</span>
+      </h1>
+      <p class="hero-sub">
+        Master Cloud-Native Development with India's most comprehensive
+        NSDC/MIDC-certified program (SSC/Q8303). Hands-on training from industry
+        experts, real projects, and guaranteed certification.
+      </p>
+      <div class="hero-actions">
+        <a href="#enroll" class="btn-primary">🚀 Start Learning</a>
+        <a href="#courses" class="btn-secondary">View Curriculum →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">500<span class="stat-accent">+</span></span>
+          <span class="stat-label">Students Trained</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">92<span class="stat-accent">%</span></span>
+          <span class="stat-label">Placement Rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">6</span>
+          <span class="stat-label">Core Modules</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="nsdc-badge-hero">
+        <div class="nsdc-icon">🏅</div>
+        <div>
+          <div class="nsdc-title">Certified under SSC/Q8303</div>
+          <div class="nsdc-sub">National Skills Development Corporation · MIDC Approved</div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon blue">☁️</div>
+        <div>
+          <div class="tech-title">Cloud Infrastructure</div>
+          <div class="tech-tags"><span class="tech-tag">AWS</span><span class="tech-tag">Linux</span><span class="tech-tag">Networking</span></div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon orange">🛠️</div>
+        <div>
+          <div class="tech-title">Development Tools</div>
+          <div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">Docker</span><span class="tech-tag">Terraform</span></div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon green">⚙️</div>
+        <div>
+          <div class="tech-title">Automation / CI-CD</div>
+          <div class="tech-tags"><span class="tech-tag">Jenkins</span><span class="tech-tag">Crontab</span><span class="tech-tag">Pipeline</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== COURSES ====== -->
+<section id="courses">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">What You'll Master</div>
+      <h2 class="section-title">Course Highlights</h2>
+      <p class="section-sub">A meticulously crafted curriculum aligned with NSDC's Cloud Application Developer standard, packed with real industry tools.</p>
+    </div>
+    <div class="courses-grid">
+      <div class="course-card reveal reveal-delay-1">
+        <div class="course-icon-wrap icon-blue">☁️</div>
+        <div class="course-title">Cloud Infrastructure</div>
+        <p class="course-desc">Build and manage scalable, resilient cloud environments on AWS. Master core networking principles and Linux system administration essential for every cloud engineer.</p>
+        <div class="skill-pills">
+          <span class="pill">AWS</span><span class="pill">EC2 &amp; S3</span><span class="pill">Networking</span><span class="pill">Linux</span><span class="pill">IAM</span><span class="pill">VPC</span>
+        </div>
+      </div>
+      <div class="course-card highlight reveal reveal-delay-2">
+        <div class="course-icon-wrap icon-orange">🛠️</div>
+        <div class="course-title">Development Tools</div>
+        <p class="course-desc">Version control, containerization, and infrastructure-as-code. Learn how modern teams ship software reliably using Git workflows, Docker containers, and Terraform automation.</p>
+        <div class="skill-pills">
+          <span class="pill orange">Git &amp; GitHub</span><span class="pill orange">Docker</span><span class="pill orange">Terraform</span><span class="pill orange">IaC</span><span class="pill orange">Container Ops</span>
+        </div>
+      </div>
+      <div class="course-card reveal reveal-delay-3">
+        <div class="course-icon-wrap icon-navy">⚙️</div>
+        <div class="course-title">Automation / CI-CD</div>
+        <p class="course-desc">Automate deployment pipelines end-to-end. Configure Jenkins for continuous integration, schedule tasks with Crontab, and build production-ready CI/CD pipelines.</p>
+        <div class="skill-pills">
+          <span class="pill navy">Jenkins</span><span class="pill navy">Crontab</span><span class="pill navy">CI/CD Pipeline</span><span class="pill navy">Shell Scripts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SYLLABUS ====== -->
+<section id="syllabus">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">NSDC &amp; MIDC Program</div>
+      <h2 class="section-title">Official SSC/Q8303 Syllabus</h2>
+      <p class="section-sub">Our curriculum strictly follows the National Occupational Standards for the Cloud Application Developer qualification. Click any module to expand.</p>
+    </div>
+    <div class="syllabus-layout">
+      <div class="reveal">
+        <div class="cert-badge">
+          <div class="cert-row"><span class="cert-dot"></span><span class="cert-text"><strong>Qualification:</strong> Cloud Application Developer</span></div>
+          <div class="cert-row"><span class="cert-dot"></span><span class="cert-text"><strong>Code:</strong> SSC/Q8303 — Level 7</span></div>
+          <div class="cert-row"><span class="cert-dot"></span><span class="cert-text"><strong>Awarding Body:</strong> NSDC (National Skills Development Corporation)</span></div>
+          <div class="cert-row"><span class="cert-dot"></span><span class="cert-text"><strong>Partner:</strong> MIDC (Maharashtra Industrial Development Corp.)</span></div>
+          <div class="cert-row"><span class="cert-dot"></span><span class="cert-text"><strong>Duration:</strong> 6 Months · 300+ Practical Hours</span></div>
+        </div>
+        <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.75;">
+          This nationally recognized qualification prepares learners for roles in cloud application development, DevOps engineering, and cloud infrastructure management. Upon completion, graduates receive an NSDC-issued certificate valid across India and recognized by leading IT employers.
+        </p>
+      </div>
+
+      <div class="syllabus-modules reveal reveal-delay-1">
+        <div class="module-item" data-module="m1">
+          <div class="module-header" onclick="toggleModule('m1')">
+            <div class="module-num mod1">01</div>
+            <div class="module-meta">
+              <div class="module-name">Module 1: Introduction to Cloud Computing</div>
+              <div class="module-sub">Foundations · Cloud Models · Deployment Types</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>Introduction to cloud computing concepts and history</li>
+              <li>IaaS, PaaS, and SaaS service models explained</li>
+              <li>Public, private, hybrid, and multi-cloud architectures</li>
+              <li>Major cloud providers overview: AWS, Azure, GCP</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="module-item" data-module="m2">
+          <div class="module-header" onclick="toggleModule('m2')">
+            <div class="module-num mod2">02</div>
+            <div class="module-meta">
+              <div class="module-name">Module 2: Linux &amp; Networking Fundamentals</div>
+              <div class="module-sub">OS Basics · Shell · TCP/IP · DNS</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>Linux command line, file system, and user management</li>
+              <li>Shell scripting and automation with Bash</li>
+              <li>TCP/IP networking, subnetting, and routing basics</li>
+              <li>DNS, DHCP, and load balancing concepts</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="module-item open" data-module="m3">
+          <div class="module-header" onclick="toggleModule('m3')">
+            <div class="module-num mod3">03</div>
+            <div class="module-meta">
+              <div class="module-name">Module 3: Application Requirements ★</div>
+              <div class="module-sub">Core NSDC Module · Architecture · Design Patterns</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>Gathering and analyzing cloud application requirements</li>
+              <li>Microservices vs monolithic architecture decision making</li>
+              <li>Designing for scalability, availability, and fault-tolerance</li>
+              <li>Data storage selection: SQL, NoSQL, object storage</li>
+              <li>Security, compliance, and governance requirements</li>
+              <li>Budgeting and TCO analysis for cloud projects</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="module-item" data-module="m4">
+          <div class="module-header" onclick="toggleModule('m4')">
+            <div class="module-num mod4">04</div>
+            <div class="module-meta">
+              <div class="module-name">Module 4: Development &amp; Containerization</div>
+              <div class="module-sub">Git · Docker · Kubernetes · Terraform</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>Git version control, branching strategies and pull requests</li>
+              <li>Docker containerization from Dockerfile to deployment</li>
+              <li>Kubernetes orchestration basics and pod management</li>
+              <li>Infrastructure as Code with Terraform and Ansible</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="module-item" data-module="m5">
+          <div class="module-header" onclick="toggleModule('m5')">
+            <div class="module-num mod5">05</div>
+            <div class="module-meta">
+              <div class="module-name">Module 5: CI/CD &amp; DevOps Automation</div>
+              <div class="module-sub">Jenkins · Pipelines · Monitoring</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>Continuous Integration with Jenkins and GitHub Actions</li>
+              <li>Building and managing multi-stage deployment pipelines</li>
+              <li>Automated testing integration in CI/CD workflows</li>
+              <li>Task scheduling with Crontab and event-driven automation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="module-item open" data-module="m6">
+          <div class="module-header" onclick="toggleModule('m6')">
+            <div class="module-num mod6">06</div>
+            <div class="module-meta">
+              <div class="module-name">Module 6: Service Management ★</div>
+              <div class="module-sub">Core NSDC Module · ITSM · Monitoring · Incident Response</div>
+            </div>
+            <span class="module-chevron">▾</span>
+          </div>
+          <div class="module-body">
+            <ul class="module-topics">
+              <li>IT Service Management (ITSM) principles and ITIL framework</li>
+              <li>Cloud monitoring with CloudWatch, Grafana, and Prometheus</li>
+              <li>Incident detection, escalation, and resolution workflows</li>
+              <li>SLA management, uptime guarantees, and performance KPIs</li>
+              <li>Capacity planning and auto-scaling strategies</li>
+              <li>Change management and release coordination processes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PORTFOLIOS ====== -->
+<section id="portfolios">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Student Work</div>
+      <h2 class="section-title">Student Portfolios</h2>
+      <p class="section-sub">Real projects built during the program. Every Eduspark graduate leaves with a live portfolio and GitHub profile.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card reveal reveal-delay-1">
+        <div class="port-thumb bg1">☁️<span class="port-label label-live">Live</span></div>
+        <div class="port-body">
+          <div class="port-name">AWS Auto-Scaling Web App</div>
+          <div class="port-student"><div class="student-avatar">RA</div> Riya Agarwal · Batch 2024</div>
+          <div class="port-stack"><span class="port-pill">AWS EC2</span><span class="port-pill">Auto Scaling</span><span class="port-pill">Route 53</span><span class="port-pill">CloudWatch</span></div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal reveal-delay-2">
+        <div class="port-thumb bg2">🐳<span class="port-label label-live">Live</span></div>
+        <div class="port-body">
+          <div class="port-name">Microservices on Docker</div>
+          <div class="port-student"><div class="student-avatar">SM</div> Sahil Mehta · Batch 2024</div>
+          <div class="port-stack"><span class="port-pill">Docker</span><span class="port-pill">Docker Compose</span><span class="port-pill">Nginx</span><span class="port-pill">Redis</span></div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal reveal-delay-3">
+        <div class="port-thumb bg3">⚙️<span class="port-label label-dev">In Dev</span></div>
+        <div class="port-body">
+          <div class="port-name">Jenkins CI/CD Pipeline</div>
+          <div class="port-student"><div class="student-avatar">PK</div> Priya Kulkarni · Batch 2025</div>
+          <div class="port-stack"><span class="port-pill">Jenkins</span><span class="port-pill">GitHub Webhooks</span><span class="port-pill">Shell</span><span class="port-pill">AWS S3</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== ENROLLMENT ====== -->
+<section id="enroll">
+  <div class="hero-grid" style="opacity:0.3;"></div>
+  <div class="enroll-inner">
+    <div class="enroll-info reveal">
+      <div class="section-label" style="color:var(--orange-lt);">Begin Your Journey</div>
+      <h2 class="section-title" style="color:white;">Enrollment &amp; Fee Calculator</h2>
+      <p class="section-sub">Select your preferred batch, get an instant fee estimate, and submit your inquiry. Our team responds within 24 hours.</p>
+      <div class="enroll-features">
+        <div class="ef-item">
+          <div class="ef-icon">🎓</div>
+          <div><div class="ef-title">NSDC Certified Certificate</div><div class="ef-sub">Nationally recognized, industry-valued credential</div></div>
+        </div>
+        <div class="ef-item">
+          <div class="ef-icon">💼</div>
+          <div><div class="ef-title">Placement Assistance</div><div class="ef-sub">Resume building, mock interviews, job referrals</div></div>
+        </div>
+        <div class="ef-item">
+          <div class="ef-icon">🛠️</div>
+          <div><div class="ef-title">Hands-On Lab Access</div><div class="ef-sub">Live AWS sandbox environments during the program</div></div>
+        </div>
+        <div class="ef-item">
+          <div class="ef-icon">📅</div>
+          <div><div class="ef-title">Flexible Batches</div><div class="ef-sub">Weekday, weekend, and evening options available</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="enroll-form-wrap reveal reveal-delay-1">
+      <div id="formContent">
+        <div class="form-title">Apply Now</div>
+        <p class="form-sub">Fill in your details — we'll confirm your seat within 24 hrs.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span>*</span></label>
+            <input type="text" id="fname" placeholder="e.g. Riya Sharma">
+          </div>
+          <div class="form-group">
+            <label>Phone Number <span>*</span></label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address <span>*</span></label>
+          <input type="email" id="email" placeholder="yourname@email.com">
+        </div>
+
+        <div class="form-group">
+          <label>Highest Qualification</label>
+          <select id="qualification">
+            <option value="">Select your qualification</option>
+            <option>10th Pass</option>
+            <option>12th Pass</option>
+            <option>Diploma (Any Field)</option>
+            <option>B.E. / B.Tech</option>
+            <option>B.Sc. Computer Science</option>
+            <option>Other Graduate</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Select Batch Type <span>*</span></label>
+          <select id="batchType" onchange="calculateFee()">
+            <option value="">Choose a batch to see fee</option>
+            <option value="25000">Weekday Batch (Mon–Fri) — ₹25,000</option>
+            <option value="28000">Weekend Batch (Sat–Sun) — ₹28,000</option>
+            <option value="22000">Evening Batch (7–9 PM) — ₹22,000</option>
+            <option value="35000">Intensive Fast-Track (4 Months) — ₹35,000</option>
+          </select>
+        </div>
+
+        <div class="fee-display" id="feeDisplay">
+          <div>
+            <div class="fee-label">Estimated Program Fee</div>
+            <div class="fee-note">Inclusive of all materials &amp; lab access</div>
+          </div>
+          <div class="fee-amount" id="feeAmount">₹0</div>
+        </div>
+
+        <div class="form-group">
+          <label>Message / Questions (Optional)</label>
+          <textarea id="message" placeholder="Any queries, preferred start date, or prior experience..."></textarea>
+        </div>
+
+        <button class="btn-submit" onclick="submitForm()">Submit Enrollment Inquiry →</button>
+      </div>
+
+      <div class="success-message" id="successMsg">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Application Received!</div>
+        <p class="success-sub">
+          Thank you for your interest in Eduspark International! Our admissions team will contact you within <strong>24 hours</strong> to confirm your batch, schedule, and enrollment details.
+        </p>
+        <button class="success-reset" onclick="resetForm()">Submit Another Inquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#home" class="nav-logo">
+          <div class="logo-mark">E</div>
+          <div class="logo-copy">
+            <span class="logo-name">Eduspark International</span>
+            <span class="logo-tagline">Pvt Ltd</span>
+          </div>
+        </a>
+        <p>Empowering India's future cloud architects with nationally certified, industry-aligned training. Official NSDC &amp; MIDC training partner since 2020.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#syllabus">Syllabus</a></li>
+          <li><a href="#portfolios">Portfolios</a></li>
+          <li><a href="#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#courses">Cloud Infrastructure</a></li>
+          <li><a href="#courses">DevOps Toolchain</a></li>
+          <li><a href="#courses">CI/CD Automation</a></li>
+          <li><a href="#syllabus">SSC/Q8303</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@eduspark.in">info@eduspark.in</a></li>
+          <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+          <li><a href="#">Nagpur, Maharashtra</a></li>
+          <li><a href="#">Mon–Sat, 9 AM – 7 PM</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Eduspark International Pvt Ltd. All rights reserved. | Official NSDC Certified Training Partner</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Nav scroll effect ── */
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  mainNav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ── Hamburger ── */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  const open = mobileNav.classList.toggle('open');
+  const spans = hamburger.querySelectorAll('span');
+  if (open) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = '1'; });
+  }
+});
+
+function closeMobileNav() {
+  mobileNav.classList.remove('open');
+  hamburger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = '1'; });
+}
+
+/* ── Syllabus accordion ── */
+function toggleModule(id) {
+  document.querySelector('[data-module="' + id + '"]').classList.toggle('open');
+}
+
+/* ── Fee calculator ── */
+function calculateFee() {
+  const val = document.getElementById('batchType').value;
+  const display = document.getElementById('feeDisplay');
+  const amount  = document.getElementById('feeAmount');
+  if (val) {
+    amount.textContent = '₹' + parseInt(val).toLocaleString('en-IN');
+    display.classList.add('visible');
+  } else {
+    display.classList.remove('visible');
+  }
+}
+
+/* ── Form submission ── */
+function submitForm() {
+  const name  = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const batch = document.getElementById('batchType').value;
+
+  if (!name || !phone || !email || !batch) {
+    const missing = [];
+    if (!name)  missing.push('Full Name');
+    if (!phone) missing.push('Phone Number');
+    if (!email) missing.push('Email Address');
+    if (!batch) missing.push('Batch Type');
+    alert('Please fill in the required fields:\n• ' + missing.join('\n• '));
+    return;
+  }
+
+  document.getElementById('formContent').style.display = 'none';
+  document.getElementById('successMsg').classList.add('visible');
+  window.scrollTo({ top: document.getElementById('enroll').offsetTop - 80, behavior: 'smooth' });
+}
+
+function resetForm() {
+  document.getElementById('formContent').style.display = 'block';
+  document.getElementById('successMsg').classList.remove('visible');
+  ['fname','phone','email','message'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('batchType').value = '';
+  document.getElementById('qualification').value = '';
+  document.getElementById('feeDisplay').classList.remove('visible');
+}
+
+/* ── Scroll reveal ── */
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
